@@ -1,0 +1,756 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Демо: лендинг з квізом (тестове завдання)</title>
+<meta name="robots" content="noindex, nofollow">
+<meta name="description" content="Пройдіть тест за 30 секунд, дізнайтесь свій магнієвий профіль і заберіть знижку та подарунок до Магнію Гліцинату.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FFF6ED; --card:#F7EEE5; --line:#E9DCCB; --accent:#CCB49B; --accent-d:#A88B6C;
+  --ink:#120E08; --muted:#5F5F5F; --gold:#EFC76C; --hot:#D65A26; --ok:#4F7A4A; --white:#fff;
+  --r:18px; --shadow:0 10px 30px rgba(18,14,8,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Ubuntu,system-ui,sans-serif;background:var(--bg);color:var(--ink);line-height:1.5;font-size:16px;padding-bottom:84px}
+img{max-width:100%;display:block}
+button{font:inherit;cursor:pointer;border:0;background:none;color:inherit}
+a{color:inherit}
+.wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+h1,h2,h3{line-height:1.2}
+h2{font-size:clamp(24px,4vw,34px);margin-bottom:10px}
+.sub{color:var(--muted);margin-bottom:24px}
+section{padding:56px 0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:15px 26px;border-radius:999px;font-weight:700;font-size:16px;transition:transform .15s,box-shadow .15s,background .15s;text-decoration:none;text-align:center}
+.btn:active{transform:scale(.97)}
+.btn-main{background:var(--ink);color:var(--bg)}
+.btn-main:hover{box-shadow:0 8px 20px rgba(18,14,8,.25)}
+.btn-gold{background:var(--gold);color:var(--ink)}
+.btn-gold:hover{box-shadow:0 8px 20px rgba(239,199,108,.5)}
+.btn-ghost{border:2px solid var(--ink)}
+.pill{display:inline-block;padding:4px 12px;border-radius:999px;background:var(--card);border:1px solid var(--line);font-size:13px;font-weight:500}
+.hot{color:var(--hot)}
+
+/* top bar: runes */
+.topbar{position:sticky;top:0;z-index:30;background:rgba(255,246,237,.94);backdrop-filter:blur(6px);border-bottom:1px solid var(--line)}
+.topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:58px}
+.brand{font-weight:700;letter-spacing:.5px;font-size:17px;white-space:nowrap}
+.brand small{display:block;font-weight:400;font-size:11px;color:var(--muted);letter-spacing:0}
+.runes{display:flex;align-items:center;gap:6px}
+.runes-label{font-size:12px;color:var(--muted);margin-right:4px}
+.rune{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:15px;background:var(--card);border:1.5px dashed var(--accent);color:var(--accent);transition:all .35s}
+.rune.on{background:var(--gold);border:1.5px solid var(--gold);color:var(--ink);transform:scale(1.08);box-shadow:0 0 0 4px rgba(239,199,108,.25)}
+@media(max-width:520px){.runes-label{display:none}.rune{width:26px;height:26px;font-size:13px}.brand small{display:none}}
+
+/* hero */
+.hero{padding:36px 0 48px}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center}
+.hero h1{font-size:clamp(30px,5vw,50px);margin:14px 0}
+.hero p.lead{font-size:18px;color:#333;margin-bottom:22px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:24px}
+.price-row{display:flex;align-items:baseline;gap:12px;margin-bottom:20px;flex-wrap:wrap}
+.price-now{font-size:34px;font-weight:700}
+.price-old{text-decoration:line-through;color:var(--muted)}
+.badge{background:var(--hot);color:#fff;font-weight:700;border-radius:8px;padding:2px 8px;font-size:14px}
+.cta-row{display:flex;gap:12px;flex-wrap:wrap}
+.hint{font-size:13px;color:var(--muted);margin-top:12px}
+.hero-visual{position:relative;background:radial-gradient(circle at 50% 45%,#fff 0,var(--card) 60%,transparent 61%);border-radius:var(--r);aspect-ratio:1/1;display:grid;place-items:center}
+.hero-visual img,.hero-visual svg{width:78%;filter:drop-shadow(0 18px 24px rgba(18,14,8,.18))}
+.hero-visual img{border-radius:28px}
+.float-tag{position:absolute;background:#fff;border-radius:14px;box-shadow:var(--shadow);padding:8px 12px;font-size:13px;font-weight:500;animation:bob 4s ease-in-out infinite}
+.float-tag.t1{top:10%;left:-2%}.float-tag.t2{bottom:16%;right:-2%;animation-delay:1.3s}.float-tag.t3{bottom:4%;left:8%;animation-delay:2.4s}
+@keyframes bob{50%{transform:translateY(-8px)}}
+@media(max-width:820px){.hero .wrap{grid-template-columns:1fr}.hero-visual{order:-1;max-width:380px;margin:0 auto;width:100%}.float-tag.t1{left:0}.float-tag.t2{right:0}}
+
+/* benefits */
+.benefits{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.benefit{background:var(--card);border-radius:var(--r);padding:20px}
+.benefit b{display:block;margin:8px 0 4px;font-size:17px}
+.benefit span{color:var(--muted);font-size:14px}
+.benefit .ico{font-size:26px}
+
+/* quiz */
+.quiz-box{background:#fff;border-radius:24px;box-shadow:var(--shadow);padding:28px;max-width:720px;margin:0 auto;position:relative;overflow:hidden}
+.q-progress{height:8px;background:var(--card);border-radius:99px;overflow:hidden;margin-bottom:8px}
+.q-progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .4s}
+.q-meta{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:18px}
+.q-title{font-size:22px;font-weight:700;margin-bottom:16px}
+.q-opts{display:grid;gap:10px}
+.q-opt{text-align:left;padding:15px 18px;border-radius:14px;background:var(--bg);border:2px solid var(--line);font-size:16px;transition:border-color .15s,background .15s,transform .1s;display:flex;gap:12px;align-items:center}
+.q-opt:hover{border-color:var(--accent)}
+.q-opt.picked{border-color:var(--ink);background:var(--card)}
+.q-opt .e{font-size:22px}
+.q-feedback{min-height:24px;margin-top:14px;font-size:14px;color:var(--accent-d);font-weight:500}
+.slide-in{animation:slide .35s ease}
+@keyframes slide{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.result-head{display:flex;gap:16px;align-items:center;margin-bottom:14px}
+.result-emoji{font-size:44px;width:76px;height:76px;border-radius:50%;background:var(--card);display:grid;place-items:center;flex:none}
+.result-name{font-size:24px;font-weight:700}
+.meter{margin:16px 0}
+.meter-row{display:grid;grid-template-columns:150px 1fr 40px;gap:10px;align-items:center;font-size:14px;margin:6px 0}
+.meter-bar{height:10px;background:var(--card);border-radius:99px;overflow:hidden}
+.meter-bar i{display:block;height:100%;background:var(--accent-d);border-radius:99px;transform-origin:left;animation:grow 1s ease both}
+@keyframes grow{from{transform:scaleX(0)}}
+@media(max-width:520px){.cta-row .btn{flex:1 1 100%}}
+@media(max-width:520px){.meter-row{grid-template-columns:110px 1fr 34px}.quiz-box{padding:20px}}
+.reward{background:linear-gradient(135deg,#fff3d1,#fbe6b0);border:2px dashed #d9ac46;border-radius:16px;padding:16px;margin:18px 0;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.code{font-family:ui-monospace,Consolas,monospace;font-weight:700;font-size:20px;letter-spacing:2px;background:#fff;padding:6px 12px;border-radius:10px}
+.note{font-size:12px;color:var(--muted);margin-top:12px}
+
+/* chest */
+.chest-wrap{text-align:center;max-width:620px;margin:0 auto}
+.chest{width:190px;height:170px;margin:26px auto 10px;position:relative;filter:drop-shadow(0 16px 20px rgba(18,14,8,.2));user-select:none}
+.chest.locked{opacity:.45;filter:grayscale(1)}
+.chest svg{width:100%;height:100%}
+.chest.shake{animation:shake .4s}
+@keyframes shake{20%{transform:rotate(-6deg)}40%{transform:rotate(6deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(3deg)}}
+.chest .lid{transform-origin:20px 70px;transition:transform .6s cubic-bezier(.3,1.6,.5,1)}
+.chest.open .lid{transform:rotate(-28deg) translateY(-12px)}
+.taps{display:flex;gap:8px;justify-content:center;margin:8px 0 16px}
+.taps i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.taps i.on{background:var(--hot)}
+.prize{display:none;background:#fff;border-radius:18px;box-shadow:var(--shadow);padding:20px;margin-top:10px}
+.prize.show{display:block;animation:pop .5s cubic-bezier(.3,1.6,.5,1)}
+@keyframes pop{from{transform:scale(.6);opacity:0}}
+.lock-msg{color:var(--muted);font-size:15px}
+
+/* packs */
+.packs{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.pack{background:#fff;border:2px solid var(--line);border-radius:20px;padding:20px 16px;text-align:left;position:relative;transition:border-color .2s,transform .2s}
+.pack:hover{transform:translateY(-3px)}
+.pack.sel{border-color:var(--ink);box-shadow:var(--shadow)}
+.pack .ribbon{position:absolute;top:-12px;left:16px;background:var(--ink);color:var(--bg);font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.pack .ribbon.gold{background:var(--gold);color:var(--ink)}
+.pack .rec{display:none;position:absolute;top:-12px;right:14px;background:var(--ok);color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:99px}
+.pack.recommended .rec{display:block}
+.pack h3{font-size:20px;margin:6px 0 2px}
+.pack .days{color:var(--muted);font-size:14px;margin-bottom:10px}
+.pack .p-now{font-size:26px;font-weight:700}
+.pack .p-old{text-decoration:line-through;color:var(--muted);font-size:14px;margin-left:6px}
+.pack .gain{margin-top:8px;font-size:14px;color:var(--ok);font-weight:700}
+@media(max-width:720px){.packs{grid-template-columns:1fr}}
+.level{background:var(--card);border-radius:20px;padding:20px;margin-top:20px}
+.level-top{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.level-bar{height:16px;background:#fff;border-radius:99px;overflow:hidden;position:relative}
+.level-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent),var(--gold));transition:width .6s}
+.level-steps{display:grid;grid-template-columns:repeat(3,1fr);margin-top:10px;font-size:13px}
+.level-steps div{text-align:center;color:var(--muted)}
+.level-steps div.on{color:var(--ink);font-weight:700}
+.unlocks{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.unlock{padding:7px 12px;border-radius:12px;background:#fff;border:1px dashed var(--accent);font-size:14px;color:var(--muted)}
+.unlock.on{border-style:solid;border-color:var(--ok);color:var(--ink);animation:pop .4s}
+.saving-big{font-size:28px;font-weight:700}
+.order-box{margin-top:20px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between;background:#fff;border-radius:20px;padding:18px;box-shadow:var(--shadow)}
+.total{font-size:15px}
+.total b{font-size:26px}
+.applied{display:none;color:var(--ok);font-weight:700;font-size:14px}
+.applied.on{display:block}
+
+/* timer */
+.timer{display:none;align-items:center;gap:8px;background:var(--ink);color:var(--bg);border-radius:12px;padding:8px 12px;font-size:14px}
+.timer.on{display:inline-flex}
+.timer b{font-family:ui-monospace,Consolas,monospace;font-size:16px;color:var(--gold)}
+
+/* challenge */
+.track{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;position:relative}
+.step{background:#fff;border-radius:20px;padding:20px;border:2px solid var(--line);cursor:pointer;transition:border-color .2s}
+.step.seen{border-color:var(--accent)}
+.step .d{display:inline-block;background:var(--card);border-radius:10px;padding:2px 10px;font-weight:700;margin-bottom:10px}
+.step ul{list-style:none;display:grid;gap:6px;font-size:15px}
+.step li::before{content:"✓ ";color:var(--ok);font-weight:700}
+.step .cover{font-size:14px;color:var(--muted)}
+.step:not(.seen) ul{display:none}
+.step.seen .cover{display:none}
+@media(max-width:720px){.track{grid-template-columns:1fr}}
+
+/* faq */
+.faq details{background:#fff;border-radius:16px;padding:16px 18px;margin-bottom:10px;border:1px solid var(--line)}
+.faq summary{font-weight:700;cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:10px}
+.faq summary::after{content:"+";font-size:20px;line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq details p,.faq details ul{margin-top:10px;color:#333}
+.faq ul{padding-left:20px}
+.trust{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:22px}
+.trust div{background:var(--card);border-radius:14px;padding:12px;text-align:center;font-size:14px;font-weight:500}
+
+footer{padding:30px 0 40px;font-size:13px;color:var(--muted);border-top:1px solid var(--line)}
+
+/* sticky buy */
+.buybar{position:fixed;left:0;right:0;bottom:0;z-index:40;background:#fff;border-top:1px solid var(--line);box-shadow:0 -6px 20px rgba(18,14,8,.08);transform:translateY(110%);transition:transform .3s}
+.buybar.on{transform:none}
+.buybar .wrap{display:flex;align-items:center;justify-content:space-between;gap:12px;height:72px}
+.buybar .bb-info{font-size:13px;color:var(--muted);line-height:1.3}
+.buybar .bb-info b{display:block;color:var(--ink);font-size:18px}
+.buybar .btn{padding:13px 22px}
+
+/* toast + confetti */
+.toast{position:fixed;left:50%;top:70px;transform:translate(-50%,-30px);opacity:0;z-index:60;background:var(--ink);color:var(--bg);padding:12px 18px;border-radius:14px;font-size:15px;font-weight:500;transition:all .35s;pointer-events:none;max-width:calc(100% - 32px);text-align:center}
+.toast.on{opacity:1;transform:translate(-50%,0)}
+.confetti{position:fixed;inset:0;pointer-events:none;z-index:55}
+
+/* modal */
+.modal{position:fixed;inset:0;z-index:70;background:rgba(18,14,8,.5);display:none;align-items:center;justify-content:center;padding:16px}
+.modal.on{display:flex}
+.modal-card{background:var(--bg);border-radius:22px;max-width:440px;width:100%;padding:24px;position:relative;animation:pop .35s}
+.modal-card h3{font-size:22px;margin-bottom:8px}
+.modal-card .x{position:absolute;top:10px;right:14px;font-size:26px}
+.modal-card ul{margin:12px 0 18px 18px}
+.reduce *{animation:none!important;transition:none!important}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div style="background:#120E08;color:#FFF6ED;font:500 14px/1.45 Ubuntu,system-ui,sans-serif;padding:10px 16px;text-align:center">
+  Демо-сторінка: тестове завдання для магазину «Лавка Мольфара», жовтень 2026. Це не офіційний сайт магазину, замовлення тут не приймаються.
+  Автор: Леонід Шамарін · Рекламні креативи: <a href="creative-1.png" style="color:#EFC76C">1</a>, <a href="creative-2.png" style="color:#EFC76C">2</a>, <a href="creative-3.png" style="color:#EFC76C">3</a>
+</div>
+
+<!-- Верхня панель: колекція рун (прогрес гравця) -->
+<div class="topbar">
+  <div class="wrap">
+    <div class="brand">ЛАВКА МОЛЬФАРА<small>натуральні добавки з наукою</small></div>
+    <div class="runes" aria-label="Зібрані руни">
+      <span class="runes-label" id="runesLabel">Руни Мольфара: 0 з 4</span>
+      <span class="rune" data-rune="quiz" title="Пройти тест">ᚱ</span>
+      <span class="rune" data-rune="chest" title="Відкрити скриню">ᚷ</span>
+      <span class="rune" data-rune="pack" title="Обрати набір">ᛉ</span>
+      <span class="rune" data-rune="path" title="Подивитися шлях на 30 днів">ᛟ</span>
+    </div>
+  </div>
+</div>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap">
+    <div>
+      <span class="pill">🌿 Магній Гліцинат · хелат бісгліцинат · 500 мг</span>
+      <h1>Спокійні вечори, глибокий сон і розслаблені м'язи</h1>
+      <p class="lead">Магній у формі, яка м'яко засвоюється і не навантажує шлунок. Пройдіть тест за 30 секунд: підкажемо, який курс підходить саме вам, і дамо знижку за проходження.</p>
+      <div class="chips">
+        <span class="pill">😌 менше стресу</span>
+        <span class="pill">🌙 легше засинати</span>
+        <span class="pill">💪 менше спазмів</span>
+        <span class="pill">⚡ рівна енергія</span>
+      </div>
+      <div class="price-row">
+        <span class="price-now">від 399 грн</span>
+        <span class="price-old">665 грн</span>
+        <span class="badge">−40%</span>
+      </div>
+      <div class="cta-row">
+        <a href="#quiz" class="btn btn-main" data-track="hero_quiz">Пройти тест і отримати −5%</a>
+        <a href="#packs" class="btn btn-ghost" data-track="hero_buy">Обрати набір</a>
+      </div>
+      <p class="hint">6 питань · 30 секунд · результат одразу на екрані</p>
+    </div>
+    <div class="hero-visual">
+      <img id="heroImg" alt="Магній Гліцинат, Лавка Мольфара" src="product.webp" onerror="if(!this.dataset.t){this.dataset.t=1;this.src='https://lavka-molfara.com.ua/image/catalog/molfar-image/6607/magniy-glitsinat-helat-bisglitsinat-180-kapsul_1.png'}else{this.replaceWith(document.getElementById('jarTpl').content.cloneNode(true))}">
+      <span class="float-tag t1">🌿 хелатна форма</span>
+      <span class="float-tag t2">🎁 подарунки до 1260 грн</span>
+      <span class="float-tag t3">📚 + до 10 гайдів</span>
+    </div>
+  </div>
+</header>
+
+<!-- Запасна ілюстрація баночки, якщо фото з сайту не завантажилось -->
+<template id="jarTpl">
+<svg viewBox="0 0 240 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Баночка Магній Гліцинат">
+  <rect x="62" y="20" width="116" height="46" rx="10" fill="#1d1712"/>
+  <rect x="62" y="56" width="116" height="10" fill="#2c241c"/>
+  <rect x="42" y="64" width="156" height="216" rx="26" fill="#2a211a"/>
+  <rect x="50" y="104" width="140" height="140" rx="10" fill="#FFF6ED"/>
+  <text x="120" y="132" text-anchor="middle" font-family="Ubuntu,sans-serif" font-size="11" fill="#A88B6C" letter-spacing="2">ЛАВКА МОЛЬФАРА</text>
+  <text x="120" y="164" text-anchor="middle" font-family="Ubuntu,sans-serif" font-size="22" font-weight="700" fill="#120E08">МАГНІЙ</text>
+  <text x="120" y="188" text-anchor="middle" font-family="Ubuntu,sans-serif" font-size="16" font-weight="700" fill="#120E08">ГЛІЦИНАТ</text>
+  <text x="120" y="212" text-anchor="middle" font-family="Ubuntu,sans-serif" font-size="11" fill="#5F5F5F">хелат бісгліцинат</text>
+  <text x="120" y="232" text-anchor="middle" font-family="Ubuntu,sans-serif" font-size="11" fill="#5F5F5F">капсули · 500 мг</text>
+  <path d="M64 90 q6 -14 14 0" stroke="#CCB49B" stroke-width="3" fill="none" opacity=".5"/>
+</svg>
+</template>
+
+<!-- ПЕРЕВАГИ (з опису товару на сайті) -->
+<section style="padding-top:12px">
+  <div class="wrap">
+    <div class="benefits">
+      <div class="benefit"><span class="ico">🌿</span><b>Високобіодоступна форма</b><span>магній поєднаний з гліцином: м'яке засвоєння без навантаження на ШКТ</span></div>
+      <div class="benefit"><span class="ico">🧠</span><b>Нервова система і сон</b><span>легше засинання і якісніше відновлення</span></div>
+      <div class="benefit"><span class="ico">💪</span><b>Розслаблення м'язів</b><span>менше спазмів і внутрішнього затиску</span></div>
+      <div class="benefit"><span class="ico">⚡</span><b>Енергетичний обмін</b><span>рівний рівень енергії без різких спадів</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- КВІЗ -->
+<section id="quiz">
+  <div class="wrap">
+    <div style="text-align:center">
+      <span class="pill">Руна ᚱ · крок 1 з 4</span>
+      <h2 style="margin-top:10px">Який у вас магнієвий профіль?</h2>
+      <p class="sub">6 коротких питань. У кінці: пояснення, курс під вас і знижка −5%.</p>
+    </div>
+    <div class="quiz-box" id="quizBox" aria-live="polite"></div>
+  </div>
+</section>
+
+<!-- СКРИНЯ -->
+<section id="chest" style="background:var(--card)">
+  <div class="wrap chest-wrap">
+    <span class="pill" style="background:#fff">Руна ᚷ · крок 2 з 4</span>
+    <h2 style="margin-top:10px">Скриня Мольфара</h2>
+    <p class="sub" id="chestSub">Тут на вас чекає гарантований подарунок. Скриня відкривається після тесту.</p>
+    <div class="chest locked" id="chestEl" role="button" tabindex="0" aria-label="Скриня з подарунком">
+      <svg viewBox="0 0 200 180" xmlns="http://www.w3.org/2000/svg">
+        <rect x="18" y="78" width="164" height="92" rx="12" fill="#8a5a33"/>
+        <rect x="18" y="78" width="164" height="16" fill="#6f4627"/>
+        <rect x="92" y="78" width="16" height="92" fill="#EFC76C"/>
+        <rect x="84" y="100" width="32" height="28" rx="6" fill="#EFC76C" stroke="#120E08" stroke-width="2"/>
+        <circle cx="100" cy="112" r="4" fill="#120E08"/>
+        <g class="lid">
+          <path d="M18 80 Q18 22 100 22 Q182 22 182 80 Z" fill="#a06b3e"/>
+          <rect x="92" y="22" width="16" height="58" fill="#EFC76C"/>
+        </g>
+      </svg>
+    </div>
+    <div class="taps" id="taps"><i></i><i></i><i></i></div>
+    <p class="lock-msg" id="chestMsg">🔒 Спершу пройдіть тест вище</p>
+    <div class="prize" id="prize"></div>
+  </div>
+</section>
+
+<!-- НАБОРИ + РІВЕНЬ ВИГОДИ -->
+<section id="packs">
+  <div class="wrap">
+    <div style="text-align:center">
+      <span class="pill">Руна ᛉ · крок 3 з 4</span>
+      <h2 style="margin-top:10px">Більший курс: більше подарунків</h2>
+      <p class="sub">Рекомендований прийом: 2 капсули в обід і 2 ввечері під час їжі. Стабільний ефект люди відзначають через 30+ днів.</p>
+    </div>
+    <div class="packs" id="packList"></div>
+
+    <div class="level">
+      <div class="level-top">
+        <b>Ваш рівень вигоди</b>
+        <span>заощаджуєте <span class="saving-big" id="savingNum">0</span> грн</span>
+      </div>
+      <div class="level-bar"><i id="levelFill"></i></div>
+      <div class="level-steps"><div data-l="60">Старт</div><div data-l="120">Курс</div><div data-l="180">Максимум</div></div>
+      <div class="unlocks" id="unlocks"></div>
+    </div>
+
+    <div class="order-box">
+      <div class="total">
+        <div id="totalLine">Набір: <b id="totalPrice">798 грн</b></div>
+        <div class="applied" id="appliedLine"></div>
+        <div class="timer" id="timer">⏳ Знижку закріплено ще на <b id="timerVal">15:00</b></div>
+      </div>
+      <button class="btn btn-main" id="orderBtn" data-track="order">Оформити замовлення</button>
+    </div>
+  </div>
+</section>
+
+<!-- ШЛЯХ НА 30 ДНІВ -->
+<section id="path" style="background:var(--card)">
+  <div class="wrap">
+    <div style="text-align:center">
+      <span class="pill" style="background:#fff">Руна ᛟ · крок 4 з 4</span>
+      <h2 style="margin-top:10px">Шлях на 30 днів</h2>
+      <p class="sub">Торкніться кожного етапу, щоб відкрити, що відзначають при регулярному прийомі.</p>
+    </div>
+    <div class="track">
+      <div class="step" data-step="7"><span class="d">7 днів</span><p class="cover">👆 Відкрити етап</p>
+        <ul><li>менше м'язового напруження</li><li>відчуття більшого спокою</li><li>комфортніша реакція на щоденний стрес</li></ul></div>
+      <div class="step" data-step="14"><span class="d">14 днів</span><p class="cover">👆 Відкрити етап</p>
+        <ul><li>більш рівний емоційний стан</li><li>легше розслаблення ввечері</li><li>краща якість відпочинку</li></ul></div>
+      <div class="step" data-step="30"><span class="d">30+ днів</span><p class="cover">👆 Відкрити етап</p>
+        <ul><li>стабільніша підтримка нервової системи</li><li>участь у нормальній роботі м'язів</li><li>підтримка енергетичного балансу</li></ul></div>
+    </div>
+    <p class="note" style="text-align:center">Тому для відчутного результату радимо курс від 120 капсул: це 30 днів прийому.</p>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+  <div class="wrap" style="max-width:760px">
+    <h2>Питання перед покупкою</h2>
+    <details><summary>Чим гліцинат кращий за інші форми магнію?</summary><p>У бісгліцинаті магній поєднаний з амінокислотою гліцином. Така хелатна форма добре переноситься і м'яко засвоюється, без навантаження на шлунково-кишковий тракт.</p></details>
+    <details><summary>Як приймати?</summary><p>2 капсули в обід і 2 капсули ввечері під час їжі. Одна капсула містить 500 мг магнію гліцинату. 120 капсул вистачає на 30 днів.</p></details>
+    <details><summary>Кому не можна?</summary><ul><li>індивідуальна чутливість до компонентів</li><li>вагітність і період грудного вигодовування</li><li>дитячий вік</li><li>ниркова недостатність або порушення обміну магнію</li><li>одночасний прийом магнієвмісних або седативних засобів: потрібна консультація фахівця</li></ul></details>
+    <details><summary>Як доставляєте і як оплатити?</summary><p>Новою Поштою у відділення та поштомати. Оплата за рахунком або готівкою при отриманні.</p></details>
+    <details><summary>Що за подарунки й гайди?</summary><p>До набору 120 капсул додаємо 1 подарунок і 5 гайдів, до 180 капсул: 2 подарунки і 10 гайдів. Разом вигода до 1 896 грн.</p></details>
+    <div class="trust"><div>✅ 100% легально</div><div>🌿 натуральний продукт</div><div>🚫 без добавок і ГМО</div><div>📦 Нова Пошта</div></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Харчова добавка. Не є лікарським засобом. Перед застосуванням проконсультуйтеся з лікарем.
+    Тест не ставить діагноз: він допомагає обрати курс. Ціни й подарунки взято зі сторінки товару на lavka-molfara.com.ua (15.10.2026).<br>
+    Концепт посадкової сторінки, виконаний як тестове завдання.
+  </div>
+</footer>
+
+<!-- Липка кнопка покупки -->
+<div class="buybar" id="buybar">
+  <div class="wrap">
+    <div class="bb-info"><span id="bbName">120 капсул · 30 днів</span><b id="bbPrice">798 грн</b></div>
+    <button class="btn btn-main" id="bbBtn" data-track="sticky_buy">Купити</button>
+  </div>
+</div>
+
+<!-- Модалка замовлення (демо) -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+  <div class="modal-card">
+    <button class="x" id="mClose" aria-label="Закрити">×</button>
+    <h3 id="mTitle">Ваше замовлення</h3>
+    <div id="mBody"></div>
+    <a class="btn btn-main" style="width:100%" id="mGo" target="_blank" rel="noopener" href="https://lavka-molfara.com.ua/mahnii-hlitsynat-khelat-bishlitsynat-120-kapsul-1084">Перейти до оформлення</a>
+    <p class="note">У робочій версії тут форма замовлення в 1 клік з уже застосованим кодом.</p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<canvas class="confetti" id="confetti"></canvas>
+
+<script>
+/* ===== Налаштування (ціни й подарунки зі сторінки товару) ===== */
+const PRODUCT_URL = 'https://lavka-molfara.com.ua/mahnii-hlitsynat-khelat-bishlitsynat-120-kapsul-1084';
+const PACKS = [
+  {id:60,  name:'60 капсул',  days:15, price:399,  old:665,  gain:266,  gifts:0, guides:0, ribbon:'Спробувати'},
+  {id:120, name:'120 капсул', days:30, price:798,  old:1330, gain:1081, gifts:1, guides:5, ribbon:'Курс на місяць'},
+  {id:180, name:'180 капсул', days:45, price:1197, old:1995, gain:1896, gifts:2, guides:10, ribbon:'Максимальна вигода', gold:true}
+];
+const QUIZ_DISCOUNT = 5;          // % за проходження тесту
+const HOLD_MINUTES = 15;          // скільки тримаємо знижку після виграшу
+// Призи скрині: усі гарантовані, програшу немає. Назви гайдів замінити на реальні з асортименту.
+const CHEST_PRIZES = [
+  {icon:'📗', title:'Гайд «Вечірній ритуал для спокійного сну»', text:'Додамо до замовлення безкоштовно.'},
+  {icon:'📘', title:'Гайд «Магній і спорт: як відновлюватися»', text:'Додамо до замовлення безкоштовно.'},
+  {icon:'📙', title:'Гайд «Антистрес-меню на тиждень»', text:'Додамо до замовлення безкоштовно.'}
+];
+
+/* ===== Стан (переживає перезавантаження) ===== */
+const store = {
+  get(k, d){ try{ const v = localStorage.getItem('lm_'+k); return v===null ? d : JSON.parse(v); }catch(e){ return d; } },
+  set(k, v){ try{ localStorage.setItem('lm_'+k, JSON.stringify(v)); }catch(e){} }
+};
+const state = {
+  runes: store.get('runes', {}),
+  quiz: store.get('quiz', null),       // {profile, scores, pack}
+  prize: store.get('prize', null),
+  pack: store.get('pack', 120),
+  holdUntil: store.get('holdUntil', 0),
+  seenSteps: store.get('seenSteps', [])
+};
+const $ = s => document.querySelector(s);
+const fmt = n => n.toLocaleString('uk-UA').replace(/ /g,' ');
+
+/* Аналітика: у робочій версії тут dataLayer.push / fbq. */
+function track(event, data){ (window.dataLayer = window.dataLayer || []).push(Object.assign({event}, data||{})); }
+document.addEventListener('click', e => { const t = e.target.closest('[data-track]'); if (t) track('click', {id:t.dataset.track}); });
+
+/* ===== Тост і конфеті ===== */
+let toastT;
+function toast(msg){ const t=$('#toast'); t.textContent=msg; t.classList.add('on'); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove('on'),2600); }
+function confetti(){
+  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  const c=$('#confetti'), x=c.getContext('2d'); c.width=innerWidth; c.height=innerHeight;
+  const colors=['#EFC76C','#CCB49B','#D65A26','#4F7A4A','#120E08'];
+  const parts=Array.from({length:120},()=>({x:innerWidth/2,y:innerHeight/3,vx:(Math.random()-.5)*12,vy:Math.random()*-10-3,s:Math.random()*6+4,c:colors[Math.random()*colors.length|0],r:Math.random()*6}));
+  let frame=0;
+  (function tick(){
+    x.clearRect(0,0,c.width,c.height);
+    parts.forEach(p=>{p.vy+=.35;p.x+=p.vx;p.y+=p.vy;p.r+=.1;x.save();x.translate(p.x,p.y);x.rotate(p.r);x.fillStyle=p.c;x.fillRect(-p.s/2,-p.s/2,p.s,p.s*.6);x.restore();});
+    if (++frame < 110) requestAnimationFrame(tick); else x.clearRect(0,0,c.width,c.height);
+  })();
+}
+
+/* ===== Руни ===== */
+function giveRune(id, msg){
+  if (state.runes[id]) return;
+  state.runes[id] = true; store.set('runes', state.runes);
+  renderRunes();
+  const n = Object.keys(state.runes).length;
+  toast(n === 4 ? '✨ Усі 4 руни зібрано! Додаємо ще один гайд у подарунок' : (msg || 'Руну отримано') + ` · ${n} з 4`);
+  track('rune', {id, total:n});
+  if (n === 4) { confetti(); renderOrder(); }
+}
+function renderRunes(){
+  document.querySelectorAll('.rune').forEach(r => r.classList.toggle('on', !!state.runes[r.dataset.rune]));
+  $('#runesLabel').textContent = `Руни Мольфара: ${Object.keys(state.runes).length} з 4`;
+}
+
+/* ===== Квіз ===== */
+// Бали: s = сон і нерви, m = м'язи, e = енергія і стрес
+const QUESTIONS = [
+  {q:'Як ви зазвичай засинаєте?', a:[
+    {t:'Швидко, сплю до ранку', e:'😴', w:{}},
+    {t:'Довго кручуся, думки не відпускають', e:'🌀', w:{s:2}},
+    {t:'Засинаю, але прокидаюсь уночі', e:'🌙', w:{s:2,e:1}}], fb:'Сон і магній тісно пов\'язані: гліцинат часто обирають саме для вечора.'},
+  {q:'Чи бувають у вас судоми або «забиті» м\'язи?', a:[
+    {t:'Майже ніколи', e:'🙂', w:{}},
+    {t:'Іноді, особливо після навантажень', e:'🏃', w:{m:2}},
+    {t:'Часто, навіть уночі', e:'⚡', w:{m:3}}], fb:'Магній бере участь у нормальній роботі м\'язів і їх розслабленні.'},
+  {q:'Скільки кави чи енергетиків на день?', a:[
+    {t:'Не п\'ю або 1 чашка', e:'🍵', w:{}},
+    {t:'2-3 чашки', e:'☕', w:{e:1,s:1}},
+    {t:'4 і більше', e:'🚀', w:{e:2,s:1}}], fb:'Кофеїн підсилює стрес-реакцію, і тоді магнію витрачається більше.'},
+  {q:'Як часто тренуєтесь або фізично працюєте?', a:[
+    {t:'Рідко', e:'🛋️', w:{}},
+    {t:'1-3 рази на тиждень', e:'🚴', w:{m:1}},
+    {t:'Майже щодня', e:'🏋️', w:{m:2,e:1}}], fb:'З потом магній втрачається, тому активним людям він потрібен більше.'},
+  {q:'Оцініть свій стрес за останній місяць', a:[
+    {t:'Спокійно, все під контролем', e:'🌿', w:{}},
+    {t:'Буває напружено', e:'😬', w:{s:1,e:1}},
+    {t:'Постійне напруження', e:'🔥', w:{s:2,e:2}}], fb:'При стресі магній потрібен нервовій системі більше, ніж зазвичай.'},
+  {q:'Як ви почуваєтесь о 16:00?', a:[
+    {t:'Бадьоро', e:'☀️', w:{}},
+    {t:'Помітний спад сил', e:'📉', w:{e:2}},
+    {t:'Ледве дотягую до вечора', e:'🪫', w:{e:3}}], fb:'Магній підтримує енергетичний обмін, щоб енергія була рівнішою.'}
+];
+const PROFILES = {
+  s:{name:'Вечірній спокій', emoji:'🌙', text:'Ваша головна зона: сон і нервова система. Магній гліцинат вам підходить, бо гліцин і магній разом допомагають розслабитися ввечері, легше заснути і краще відновитися за ніч. Перші зміни, як-от більше спокою, люди помічають протягом 7 днів, а стабільний ефект після 30 днів.'},
+  m:{name:'Розслаблені м\'язи', emoji:'💪', text:'Ваша головна зона: м\'язи і відновлення. Магній бере участь у нормальній роботі м\'язів, тому при навантаженнях і спазмах його запас витрачається швидше. За перший тиждень регулярного прийому люди відзначають менше м\'язового напруження.'},
+  e:{name:'Рівна енергія', emoji:'⚡', text:'Ваша головна зона: стрес і енергія протягом дня. Кава і напруження підвищують витрати магнію, а він підтримує енергетичний обмін. Мета курсу: рівна енергія без різких спадів і спокійніша реакція на щоденний стрес.'},
+  ok:{name:'Профілактика', emoji:'🌿', text:'Явних сигналів дефіциту у відповідях немає. Це добре! Магній гліцинат можна приймати для підтримки, особливо в сезон навантажень. Для знайомства з продуктом підійде набір на 60 капсул.'}
+};
+let qi = 0, answers = [];
+function renderQuiz(){
+  const box = $('#quizBox');
+  if (state.quiz) return renderResult(true);
+  const Q = QUESTIONS[qi];
+  box.innerHTML = `
+    <div class="q-progress"><i style="width:${qi/QUESTIONS.length*100}%"></i></div>
+    <div class="q-meta"><span>Питання ${qi+1} з ${QUESTIONS.length}</span><span>${qi===0?'знижка −'+QUIZ_DISCOUNT+'% у кінці':'ще '+(QUESTIONS.length-qi)+' до знижки'}</span></div>
+    <div class="slide-in">
+      <div class="q-title">${Q.q}</div>
+      <div class="q-opts">${Q.a.map((a,i)=>`<button class="q-opt" data-i="${i}"><span class="e">${a.e}</span>${a.t}</button>`).join('')}</div>
+      <div class="q-feedback" id="qfb"></div>
+    </div>`;
+  requestAnimationFrame(()=>{ const bar = box.querySelector('.q-progress i'); bar.style.width = (qi/QUESTIONS.length*100)+'%'; });
+  box.querySelectorAll('.q-opt').forEach(b => b.onclick = () => pick(+b.dataset.i, b));
+  if (qi===0) track('quiz_start');
+}
+function pick(i, btn){
+  if (btn.parentElement.dataset.locked) return;
+  btn.parentElement.dataset.locked = 1;
+  btn.classList.add('picked');
+  answers[qi] = i;
+  $('#qfb').textContent = '💡 ' + QUESTIONS[qi].fb;
+  $('#quizBox .q-progress i').style.width = ((qi+1)/QUESTIONS.length*100)+'%';
+  setTimeout(()=>{ qi++; qi < QUESTIONS.length ? renderQuiz() : finishQuiz(); }, 900);
+}
+function finishQuiz(){
+  const sc = {s:0,m:0,e:0};
+  answers.forEach((ai,qn)=>{ const w = QUESTIONS[qn].a[ai].w; for (const k in w) sc[k]+=w[k]; });
+  const total = sc.s+sc.m+sc.e;
+  const top = Object.keys(sc).sort((a,b)=>sc[b]-sc[a])[0];
+  const profile = total <= 2 ? 'ok' : top;
+  const pack = total <= 2 ? 60 : total >= 9 ? 180 : 120;
+  state.quiz = {profile, scores:sc, pack, total};
+  store.set('quiz', state.quiz);
+  setPack(pack, true);
+  startHold();
+  track('quiz_complete', {profile, pack, total});
+  renderResult(false);
+  giveRune('quiz', 'Руна ᚱ: тест пройдено');
+  unlockChest();
+  confetti();
+}
+function renderResult(restored){
+  const {profile, scores, pack} = state.quiz;
+  const P = PROFILES[profile], max = 8;
+  const pk = PACKS.find(p=>p.id===pack);
+  $('#quizBox').innerHTML = `
+    <div class="slide-in">
+      <div class="result-head"><div class="result-emoji">${P.emoji}</div>
+        <div><div class="pill">Ваш профіль</div><div class="result-name">${P.name}</div></div></div>
+      <p>${P.text}</p>
+      <div class="meter">
+        ${[['s','🌙 Сон і нерви'],['m','💪 М\'язи'],['e','⚡ Енергія і стрес']].map(([k,l])=>`
+          <div class="meter-row"><span>${l}</span><div class="meter-bar"><i style="width:${Math.max(4,Math.min(100,scores[k]/max*100))}%"></i></div><span>${scores[k]}</span></div>`).join('')}
+      </div>
+      <p><b>Рекомендуємо:</b> ${pk.name}, це ${pk.days} днів прийому${pk.gifts?` + ${pk.gifts} 🎁 + ${pk.guides} гайдів`:''}.</p>
+      <div class="reward">
+        <div style="font-size:34px">🎉</div>
+        <div style="flex:1;min-width:180px"><b>Ваша знижка −${QUIZ_DISCOUNT}% за тест</b><br><span style="font-size:14px">вже застосована до набору нижче</span></div>
+        <span class="code">MOLFAR5</span>
+      </div>
+      <div class="cta-row"><a href="#chest" class="btn btn-gold">Відкрити скриню з подарунком 🎁</a><a href="#packs" class="btn btn-ghost">До наборів</a></div>
+      <p class="note">Тест не є медичною діагностикою і не замінює консультацію лікаря.</p>
+      <button class="note" id="retake" style="text-decoration:underline">Пройти тест ще раз</button>
+    </div>`;
+  $('#retake').onclick = () => { state.quiz=null; store.set('quiz',null); qi=0; answers=[]; renderQuiz(); };
+  if (!restored) $('#quiz').scrollIntoView({block:'start'});
+}
+
+/* ===== Скриня: 3 дотики, гарантований приз ===== */
+let taps = 0;
+function unlockChest(){
+  const c = $('#chestEl');
+  c.classList.remove('locked');
+  if (state.prize) return showPrize(true);
+  $('#chestSub').textContent = 'Торкніться скрині 3 рази, щоб зламати замок. Порожньою вона не буває.';
+  $('#chestMsg').textContent = '👆 Тисніть на скриню';
+}
+function hitChest(){
+  const c = $('#chestEl');
+  if (c.classList.contains('locked')) { toast('🔒 Спершу пройдіть тест: це 30 секунд'); $('#quiz').scrollIntoView(); return; }
+  if (state.prize) return;
+  taps++;
+  document.querySelectorAll('#taps i').forEach((d,i)=>d.classList.toggle('on', i<taps));
+  c.classList.remove('shake'); void c.offsetWidth; c.classList.add('shake');
+  if (navigator.vibrate) navigator.vibrate(30);
+  if (taps >= 3) {
+    const prizeIdx = state.quiz ? {s:0,m:1,e:2,ok:0}[state.quiz.profile] : 0;
+    state.prize = CHEST_PRIZES[prizeIdx];
+    store.set('prize', state.prize);
+    track('chest_open', {prize: state.prize.title});
+    setTimeout(()=>{ showPrize(false); confetti(); giveRune('chest', 'Руна ᚷ: скриню відкрито'); }, 350);
+  }
+}
+function showPrize(restored){
+  const c = $('#chestEl'); c.classList.add('open');
+  document.querySelectorAll('#taps i').forEach(d=>d.classList.add('on'));
+  $('#chestMsg').textContent = '';
+  $('#chestSub').textContent = restored ? 'Ваш подарунок уже чекає в замовленні.' : 'Ось що було всередині:';
+  const p = $('#prize');
+  p.innerHTML = `<div style="font-size:44px">${state.prize.icon}</div><h3 style="margin:6px 0">${state.prize.title}</h3><p style="color:var(--muted)">${state.prize.text} Підібрано під ваш профіль.</p>
+    <a href="#packs" class="btn btn-main" style="margin-top:14px">Забрати разом із набором</a>`;
+  p.classList.add('show');
+  renderOrder();
+}
+$('#chestEl').addEventListener('click', hitChest);
+$('#chestEl').addEventListener('keydown', e => { if (e.key==='Enter'||e.key===' ') { e.preventDefault(); hitChest(); } });
+
+/* ===== Набори і рівень вигоди ===== */
+function renderPacks(){
+  $('#packList').innerHTML = PACKS.map(p=>`
+    <button class="pack" data-id="${p.id}">
+      <span class="ribbon ${p.gold?'gold':''}">${p.ribbon}</span>
+      <span class="rec">✓ ваш результат</span>
+      <h3>${p.name}</h3>
+      <div class="days">${p.days} днів курсу · по 4 капсули на день</div>
+      <span class="p-now">${fmt(p.price)} грн</span><span class="p-old">${fmt(p.old)} грн</span>
+      <div class="gain">Вигода ${fmt(p.gain)} грн${p.gifts?` + ${p.gifts} 🎁 + ${p.guides} гайдів`:''}</div>
+    </button>`).join('');
+  document.querySelectorAll('.pack').forEach(b => b.onclick = () => setPack(+b.dataset.id));
+}
+let savingShown = 0;
+function animateNumber(el, to){
+  const from = savingShown, start = performance.now(), dur = 600;
+  (function step(now){ const k = Math.min(1,(now-start)/dur); el.textContent = fmt(Math.round(from+(to-from)*k)); if (k<1) requestAnimationFrame(step); })(start);
+  savingShown = to;
+}
+function setPack(id, silent){
+  const prev = state.pack;
+  state.pack = id; store.set('pack', id);
+  const p = PACKS.find(x=>x.id===id);
+  document.querySelectorAll('.pack').forEach(b=>{
+    b.classList.toggle('sel', +b.dataset.id===id);
+    b.classList.toggle('recommended', !!state.quiz && +b.dataset.id===state.quiz.pack);
+  });
+  $('#levelFill').style.width = ({60:33,120:66,180:100})[id]+'%';
+  document.querySelectorAll('.level-steps div').forEach(d=>d.classList.toggle('on', +d.dataset.l<=id));
+  const list = [
+    {need:60,  t:'−40% на базовий формат'},
+    {need:120, t:'🎁 подарунок'},
+    {need:120, t:'📚 5 гайдів'},
+    {need:180, t:'🎁 другий подарунок'},
+    {need:180, t:'📚 ще 5 гайдів (разом 10)'}
+  ];
+  $('#unlocks').innerHTML = list.map(u=>`<span class="unlock ${id>=u.need?'on':''}">${id>=u.need?'✓':'🔒'} ${u.t}</span>`).join('');
+  animateNumber($('#savingNum'), p.gain);
+  renderOrder();
+  if (!silent) {
+    track('pack_select', {pack:id});
+    giveRune('pack', 'Руна ᛉ: набір обрано');
+    if (id > prev) toast(id===180 ? '🔓 Максимум: +2 подарунки і 10 гайдів' : '🔓 Відкрито подарунок і 5 гайдів');
+    else if (id < prev) toast('Частину подарунків заблоковано 🔒');
+  }
+}
+function orderTotals(){
+  const p = PACKS.find(x=>x.id===state.pack);
+  const disc = state.quiz ? Math.round(p.price*QUIZ_DISCOUNT/100) : 0;
+  return {p, disc, total: p.price - disc};
+}
+function renderOrder(){
+  const {p, disc, total} = orderTotals();
+  $('#totalPrice').textContent = fmt(total)+' грн';
+  const extras = [];
+  if (disc) extras.push(`−${QUIZ_DISCOUNT}% за тест (−${disc} грн)`);
+  if (state.prize) extras.push('подарунок зі скрині');
+  if (Object.keys(state.runes).length===4) extras.push('гайд за 4 руни');
+  const ap = $('#appliedLine');
+  ap.classList.toggle('on', extras.length>0);
+  ap.textContent = extras.length ? '✓ ' + extras.join(' · ') : '';
+  $('#bbName').textContent = `${p.name} · ${p.days} днів${disc?' · −'+QUIZ_DISCOUNT+'%':''}`;
+  $('#bbPrice').textContent = fmt(total)+' грн';
+}
+
+/* ===== Чесний таймер: стартує один раз після виграшу і не скидається ===== */
+function startHold(){
+  if (!state.holdUntil) { state.holdUntil = Date.now() + HOLD_MINUTES*60000; store.set('holdUntil', state.holdUntil); }
+  tickHold();
+}
+let holdT;
+function tickHold(){
+  clearTimeout(holdT);
+  const left = state.holdUntil - Date.now();
+  const t = $('#timer');
+  if (!state.holdUntil) return;
+  if (left <= 0) { t.classList.add('on'); t.innerHTML = '⌛ Знижку за тест ще можна використати сьогодні'; return; }
+  t.classList.add('on');
+  const m = Math.floor(left/60000), s = Math.floor(left%60000/1000);
+  $('#timerVal').textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  holdT = setTimeout(tickHold, 1000);
+}
+
+/* ===== Шлях на 30 днів ===== */
+document.querySelectorAll('.step').forEach(st=>{
+  if (state.seenSteps.includes(st.dataset.step)) st.classList.add('seen');
+  st.addEventListener('click', ()=>{
+    if (st.classList.contains('seen')) return;
+    st.classList.add('seen');
+    state.seenSteps.push(st.dataset.step); store.set('seenSteps', state.seenSteps);
+    track('path_step', {step: st.dataset.step});
+    if (state.seenSteps.length === 3) giveRune('path', 'Руна ᛟ: шлях відкрито');
+  });
+});
+
+/* ===== Замовлення ===== */
+function openOrder(){
+  const {p, disc, total} = orderTotals();
+  const lines = [`${p.name} (${p.days} днів): ${fmt(p.price)} грн`];
+  if (disc) lines.push(`Знижка за тест −${QUIZ_DISCOUNT}%: −${disc} грн, код MOLFAR5`);
+  if (p.gifts) lines.push(`${p.gifts} 🎁 подарунок(и) і ${p.guides} гайдів`);
+  if (state.prize) lines.push(`${state.prize.icon} ${state.prize.title}`);
+  if (Object.keys(state.runes).length===4) lines.push('📗 Додатковий гайд за 4 руни');
+  $('#mBody').innerHTML = `<ul>${lines.map(l=>`<li>${l}</li>`).join('')}</ul><p style="margin-bottom:16px"><b>До сплати: ${fmt(total)} грн</b></p>`;
+  $('#mGo').href = PRODUCT_URL;
+  $('#modal').classList.add('on');
+  track('begin_checkout', {pack:p.id, value:total});
+}
+$('#orderBtn').onclick = openOrder;
+$('#bbBtn').onclick = openOrder;
+$('#mClose').onclick = () => $('#modal').classList.remove('on');
+$('#modal').addEventListener('click', e => { if (e.target.id==='modal') $('#modal').classList.remove('on'); });
+document.addEventListener('keydown', e => { if (e.key==='Escape') $('#modal').classList.remove('on'); });
+
+/* ===== Липка панель: з'являється після першого екрана ===== */
+const hero = document.querySelector('.hero');
+new IntersectionObserver(([en]) => $('#buybar').classList.toggle('on', !en.isIntersecting)).observe(hero);
+
+/* ===== Старт ===== */
+renderRunes();
+renderPacks();
+setPack(state.pack, true);
+renderQuiz();
+if (state.quiz) { unlockChest(); if (state.holdUntil) tickHold(); }
+</script>
+</body>
+</html>
